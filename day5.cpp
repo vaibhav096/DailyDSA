@@ -1,62 +1,51 @@
+/*
+Day 5 of 30 🗓
+
+Problem : Find the Leaders in an Array
+You are given an integer array arr of size n. An element is considered a leader if it is greater than all the elements to its right. Your task is to find all such leader elements in the array.
+
+Input :
+An integer array arr of size n.
+Example : 
+arr = [16, 17, 4, 3, 5, 2]
+
+Output :
+Return an array containing all the leader elements in the order in which they appear in the original array.
+Example:
+Leaders: [17, 5, 2]
+*/
+
+#include<vector>
 #include<iostream>
 #include<vector>
-#include<unordered_map>
+#include <algorithm>
 using namespace std;
 
-// Function to find all subarrays with zero sum
-vector<pair<int, int>> findZeroSumSubarrays(const vector<int>& arr) {
-    vector<pair<int, int>> result;
-    unordered_map<int, vector<int>> prefixSumMap;
-    int sum = 0;
-    
-    // Insert initial prefix sum 0 at index -1 to handle subarrays starting from index 0
-    prefixSumMap[0].push_back(-1);
-    
-    for(int i = 0; i < arr.size(); i++) {
-        sum += arr[i];
-        
-        // If sum has been seen before, it means there's a zero-sum subarray
-        if(prefixSumMap.find(sum) != prefixSumMap.end()) {
-            for(int startIndex : prefixSumMap[sum]) {
-                result.push_back({startIndex + 1, i});
-            }
+void leader(vector<int> arr){
+    vector<int> ans;
+    int size = arr.size();
+    int maxNum = arr[size-1];
+    ans.push_back(arr[size-1]);
+
+    for(int i=size-2;i>=0;i--){
+        if(maxNum < arr[i]){
+            maxNum = arr[i];
+            ans.push_back(arr[i]);
         }
-        
-        // Store the current sum with the current index
-        prefixSumMap[sum].push_back(i);
     }
     
-    return result;
-}
+    reverse(ans.begin(),ans.end());
 
-void printResult(const vector<pair<int, int>>& result) {
-    cout << "[ ";
-    for(const auto& p : result) {
-        cout << "( " << p.first << " " << p.second << " ) ";
+    for(int i=0;i<=ans.size()-1;i++){
+        cout<<ans[i]<<" ";
     }
-    cout << "]" << endl;
+    cout<<endl;
 }
 
-int main() {
-    // Test Case 1
-    vector<int> array1 = {4, -1, -3, 1, 2, -1}; 
-    vector<pair<int, int>> result1 = findZeroSumSubarrays(array1);
-    cout << "Result test case 1: "; printResult(result1);
-    
-    // Test Case 2
-    vector<int> array2 = {1, 2, 3, 4}; 
-    vector<pair<int, int>> result2 = findZeroSumSubarrays(array2);
-    cout << "Result test case 2: "; printResult(result2);
-    
-    // Test Case 3
-    vector<int> array3 = {0, 0, 0}; 
-    vector<pair<int, int>> result3 = findZeroSumSubarrays(array3);
-    cout << "Result test case 3: "; printResult(result3);
-    
-    // Test Case 4
-    vector<int> array4 = {-3, 1, 2, -3, 4, 0}; 
-    vector<pair<int, int>> result4 = findZeroSumSubarrays(array4);
-    cout << "Result test case 4: "; printResult(result4);
+int main(){
+    vector<int> v1 = {16, 17, 4, 3, 5, 2};
+
+    leader(v1);
     
     return 0;
 }
